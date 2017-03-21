@@ -6,9 +6,10 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
+import si.pecan.Stubs.Companion.ANOTHER_VALID_USER
+import si.pecan.Stubs.Companion.VALID_USER
 import si.pecan.model.ChatRoom
 import si.pecan.model.InstantMessage
-import si.pecan.model.User
 import javax.transaction.Transactional
 
 /**
@@ -19,14 +20,6 @@ import javax.transaction.Transactional
 @Transactional
 open class RepositoryTests {
 
-    companion object {
-        val VALID_USER = User().apply {
-            username = "testuser"
-        }
-        val ANOTHER_VALID_USER = User().apply {
-            username = "another"
-        }
-    }
 
     @Autowired
     lateinit var userRepository: UserRepository
