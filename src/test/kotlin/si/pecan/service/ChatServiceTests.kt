@@ -34,11 +34,14 @@ open class ChatServiceTests {
     lateinit var userService: UserService
 
     @Test
-    fun createChat(): UUID {
-        createUsers()
-        val chatId: UUID? = chatService.createChat(USER1, USER2)
+    fun createChat() {
+        val chatId = newChat()
         chatId.should.not.be.`null`
-        return chatId!!
+    }
+
+    fun newChat(): UUID {
+        createUsers()
+        return chatService.getOrCreateChat(USER1, USER2)
     }
 
     private fun createUsers() {
@@ -49,14 +52,14 @@ open class ChatServiceTests {
 
     @Test
     fun postToChat() {
-        val chatId = createChat()
+        val chatId = newChat()
         val message: InstantMessage = chatService.postMessage(USER1, chatId, "Message content here")
         message.id.should.not.be.`null`
     }
 
     @Test(expected = UserNotAllowedToAccessChat::class)
     fun postToChatWrongUser() {
-        val chatId: UUID = createChat()
+        val chatId: UUID = newChat()
         chatService.postMessage(UNAUTHORIZED_USER, chatId, "Message content here")
     }
 

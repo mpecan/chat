@@ -68,6 +68,7 @@ open class RepositoryTests {
         val users = userRepository.save(arrayListOf(VALID_USER, ANOTHER_VALID_USER)).toCollection(mutableListOf())
         val chatRoom = chatRepository.save(ChatRoom().apply {
             this.users = users
+            this.createdBy = users.first()
         })
         return chatRoom
     }

@@ -6,8 +6,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import si.pecan.DuplicateUserException
-import si.pecan.Stubs.Companion.VALID_USER
 import si.pecan.model.User
 import si.pecan.services.UserService
 import javax.transaction.Transactional
@@ -26,7 +24,7 @@ open class UserServiceTests {
 
     @Test
     fun testUserCreation() {
-        val user:User = userService.getOrCreate("newUser")
+        val user: User = userService.getOrCreate("newUser")
         user.id.should.not.be.`null`
     }
 
@@ -37,5 +35,5 @@ open class UserServiceTests {
         first.id.should.equal(second.id)
     }
 
-    
+
 }
