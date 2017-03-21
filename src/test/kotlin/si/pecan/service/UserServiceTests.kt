@@ -26,16 +26,14 @@ class UserServiceTests {
 
     @Test
     fun testUserCreation() {
-        val user:User = userService.create(User().apply {
-            username = "newUser"
-        })
+        val user:User = userService.getOrCreate("newUser")
         user.id.should.not.be.`null`
     }
 
-    @Test(expected = DuplicateUserException::class)
     fun testUserUniqueness() {
-        userService.create(VALID_USER)
-        userService.create(VALID_USER)
+        val first = userService.getOrCreate("newUser")
+        val second = userService.getOrCreate("newUser")
+        first.id.should.equal(second.id)
     }
 
     

@@ -8,7 +8,7 @@ import si.pecan.model.User
  */
 @Service
 class UserService {
-    fun create(user: User): User {
+    fun getOrCreate(user: String): User {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
