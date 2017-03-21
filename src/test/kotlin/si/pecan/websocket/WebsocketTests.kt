@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class WebsocketTests {
 
     companion object {
-        val WEBSOCKET_URI = "ws://localhost:{port}/websocket"
+        val WEBSOCKET_URI = "ws://localhost:{port}/messages"
         val WEBSOCKET_TOPIC = "/topic"
     }
 

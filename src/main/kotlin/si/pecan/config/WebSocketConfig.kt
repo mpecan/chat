@@ -20,7 +20,7 @@ class WebSocketConfig : AbstractWebSocketMessageBrokerConfigurer() {
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry
-                .addEndpoint("/websocket")
+                .addEndpoint("/messages")
                 .setAllowedOrigins("*")
                 .withSockJS()
     }

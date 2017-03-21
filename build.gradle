@@ -38,4 +38,5 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile 'com.winterbe:expekt:0.5.0'
 }
