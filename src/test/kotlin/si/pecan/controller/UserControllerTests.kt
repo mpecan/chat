@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional
-class UserControllerTests {
+open class UserControllerTests {
 
     @Test
     fun exists(){
