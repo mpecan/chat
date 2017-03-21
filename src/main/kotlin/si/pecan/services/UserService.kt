@@ -10,4 +10,5 @@ import si.pecan.model.User
 @Service
 class UserService(private val userRepository: UserRepository) {
     fun getOrCreate(user: String): User = userRepository.findByUsername(user) ?: userRepository.save(User().apply { username = user })
+    fun getAll() = userRepository.findAll().toCollection(arrayListOf())
 }

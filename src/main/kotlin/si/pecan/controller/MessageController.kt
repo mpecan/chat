@@ -1,5 +1,6 @@
 package si.pecan.controller
 
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
@@ -7,5 +8,4 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 class MessageController {
-    
 }

@@ -35,5 +35,12 @@ open class UserServiceTests {
         first.id.should.equal(second.id)
     }
 
+    @Test
+    fun testGetUsers() {
+        arrayListOf("user", "user2", "user3").map { userService.getOrCreate(it) }
+        val all = userService.getAll()
+        all.size.should.equal(3)
+    }
+
 
 }
