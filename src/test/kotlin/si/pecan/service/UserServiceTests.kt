@@ -19,7 +19,7 @@ import javax.transaction.Transactional
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional
-class UserServiceTests {
+open class UserServiceTests {
 
     @Autowired
     lateinit var userService: UserService
@@ -30,6 +30,7 @@ class UserServiceTests {
         user.id.should.not.be.`null`
     }
 
+    @Test
     fun testUserUniqueness() {
         val first = userService.getOrCreate("newUser")
         val second = userService.getOrCreate("newUser")
