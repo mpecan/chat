@@ -16,5 +16,5 @@ class UserService(private val userRepository: UserRepository) {
                             .save(it.apply { this.lastActive = LocalDateTime.now() })
                     }
                     ?: userRepository.save(User().apply { username = user })
-    fun getAll() = userRepository.findAll().toCollection(arrayListOf())
+    fun getAllOrdered() = userRepository.findUsersOrderByLastActiveDesc()
 }

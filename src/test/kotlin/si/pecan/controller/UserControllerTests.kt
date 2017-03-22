@@ -114,9 +114,10 @@ open class UserControllerTests {
                     val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>(){})
                     result.size.should.be.above(1)
                     // First user is skipped as it is the requesting user
-                    result[0].username.should.equal(usernames[1])
-                    result[1].username.should.equal(usernames[3])
-                    result[2].username.should.equal(usernames[4])
+                    // Order should be reversed from the insert order
+                    result[0].username.should.equal(usernames[3])
+                    result[1].username.should.equal(usernames[2])
+                    result[2].username.should.equal(usernames[1])
                 }
     }
 }

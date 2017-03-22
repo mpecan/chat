@@ -17,6 +17,6 @@ class UserController(private val userService: UserService) {
     fun getUser(@RequestBody request: GetUserInfoRequest) = userService.getOrCreate(request.username).toDto()
 
     @RequestMapping(method = arrayOf(RequestMethod.GET))
-    fun getOtherUsers(@RequestParam("username") username: String) = userService.getAll().filter { it.username != username }.map(User::toDto)
+    fun getOtherUsers(@RequestParam("username") username: String) = userService.getAllOrdered().filter { it.username != username }.map(User::toDto)
 }
 
