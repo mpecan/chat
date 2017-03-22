@@ -19,4 +19,7 @@ class ChatRoom : EntityBase() {
     @ManyToOne
     lateinit var createdBy: User
 
+    @OneToMany(mappedBy = "room")
+    var messages: List<InstantMessage> = listOf()
+
 }

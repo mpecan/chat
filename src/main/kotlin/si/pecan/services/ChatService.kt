@@ -2,8 +2,11 @@ package si.pecan.services
 
 import org.springframework.stereotype.Service
 import si.pecan.*
+import si.pecan.dto.toDto
 import si.pecan.model.ChatRoom
+import si.pecan.dto.ChatRoom as Dto
 import si.pecan.model.InstantMessage
+import si.pecan.model.User
 import java.util.*
 
 /**
@@ -15,7 +18,7 @@ class ChatService(private val userRepository: UserRepository,
                   private val instantMessageRepository: InstantMessageRepository) {
 
 
-    fun getOrCreateChat(initiatorUsername: String, targetUsername: String): UUID {
+    fun getOrCreateChat(initiatorUsername: String, targetUsername: String): Dto {
         val initiator = userRepository.findByUsername(initiatorUsername) ?: throw UserNotFound()
         val target = userRepository.findByUsername(targetUsername) ?: throw UserNotFound()
         val chatRoom = initiator.chatRooms.find { it.users.any { it == target } } ?: chatRoomRepository.save(ChatRoom().apply {
@@ -23,7 +26,7 @@ class ChatService(private val userRepository: UserRepository,
             createdBy = initiator
         })
 
-        return chatRoom.id!!
+        return Dto(chatRoom.id!!, chatRoom.users.map(User::toDto), chatRoom.messages.map(InstantMessage::toDto))
     }
 
     fun postMessage(username: String, chatId: UUID, messageContent: String): InstantMessage {

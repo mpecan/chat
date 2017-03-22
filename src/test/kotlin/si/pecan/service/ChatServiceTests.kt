@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import si.pecan.UserNotAllowedToAccessChat
+import si.pecan.dto.ChatRoom
 import si.pecan.model.InstantMessage
 import si.pecan.services.ChatService
 import si.pecan.services.UserService
@@ -39,7 +40,7 @@ open class ChatServiceTests {
         chatId.should.not.be.`null`
     }
 
-    fun newChat(): UUID {
+    fun newChat(): ChatRoom {
         createUsers()
         return chatService.getOrCreateChat(USER1, USER2)
     }
@@ -52,15 +53,15 @@ open class ChatServiceTests {
 
     @Test
     fun postToChat() {
-        val chatId = newChat()
-        val message: InstantMessage = chatService.postMessage(USER1, chatId, "Message content here")
+        val chat :ChatRoom= newChat()
+        val message: InstantMessage = chatService.postMessage(USER1, chat.id, "Message content here")
         message.id.should.not.be.`null`
     }
 
     @Test(expected = UserNotAllowedToAccessChat::class)
     fun postToChatWrongUser() {
-        val chatId: UUID = newChat()
-        chatService.postMessage(UNAUTHORIZED_USER, chatId, "Message content here")
+        val chat: ChatRoom = newChat()
+        chatService.postMessage(UNAUTHORIZED_USER, chat.id, "Message content here")
     }
 
 
