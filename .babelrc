@@ -1,0 +1,11 @@
+{
+  "presets":[
+    "es2015", "react",
+    "react-hmre", "stage-0" ],
+  "plugins": [
+    "syntax-decorators",
+    "transform-class-properties",
+    "transform-decorators-legacy",
+    "transform-runtime"
+  ]
+}
