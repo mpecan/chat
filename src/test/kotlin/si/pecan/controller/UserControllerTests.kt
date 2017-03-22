@@ -63,7 +63,7 @@ open class UserControllerTests {
     @Test
     fun getUser() {
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/username").contentType(MediaType.APPLICATION_JSON)
+                .post("/api/user").contentType(MediaType.APPLICATION_JSON)
                 .content(
                         mapper.writeValueAsString(
                                 GetUserInfoRequest(username = "testUser")
@@ -89,11 +89,34 @@ open class UserControllerTests {
     fun getAllUsers() {
         val users = arrayOf("username", "another", "yet_another").map { userService.getOrCreate(it) }
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/username").param("username", "username"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user").param("username", "username"))
                 .andExpect(status().isOk)
                 .andExpect {
                     val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>(){})
                     result.size.should.be.above(1)
+                    result.forEach { user ->
+                        users.any { it.username == user.username }.should.equal(true)
+                    }
+                }
+    }
+
+    @Test
+    fun usersShouldBeInOrder() {
+        val usernames = arrayOf("username", "another", "yet_another", "last")
+        usernames.map {
+            Thread.sleep(200)
+            userService.getOrCreate(it)
+        }
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user").param("username", "username"))
+                .andExpect(status().isOk)
+                .andExpect {
+                    val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>(){})
+                    result.size.should.be.above(1)
+                    // First user is skipped as it is the requesting user
+                    result[0].username.should.equal(usernames[1])
+                    result[1].username.should.equal(usernames[3])
+                    result[2].username.should.equal(usernames[4])
                 }
     }
 }
