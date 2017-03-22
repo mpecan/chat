@@ -37,6 +37,10 @@ dependencies {
     compile('com.h2database:h2')
 	compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+	compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.2"
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile 'com.winterbe:expekt:0.5.0'
+	testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.1.2.RELEASE'
 }
