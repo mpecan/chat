@@ -26,7 +26,14 @@ class ChatService(private val userRepository: UserRepository,
             createdBy = initiator
         })
 
-        return Dto(chatRoom.id!!, chatRoom.users.map(User::toDto), chatRoom.messages.map(InstantMessage::toDto))
+        return Dto(
+                chatRoom.id!!,
+                initiator.toDto(),
+                target.toDto(),
+                chatRoom.messages.map(InstantMessage::toDto),
+                chatRoom.created,
+                if (chatRoom.messages.isEmpty()) null else chatRoom.messages.last().created
+        )
     }
 
     fun postMessage(username: String, chatId: UUID, messageContent: String): InstantMessage {

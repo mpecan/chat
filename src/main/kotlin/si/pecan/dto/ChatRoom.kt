@@ -8,7 +8,7 @@ import java.util.*
 /**
  * Created by m.pecan on 22/03/2017.
  */
-data class ChatRoom(val id: UUID, val users: List<User>, val messages: List<Message>)
+data class ChatRoom(val id: UUID, val initiator: User, val target: User, val messages: List<Message>, val created: LocalDateTime, val lastMessageTime: LocalDateTime?)
 
 data class Message(val poster: String, val content: String, val created: LocalDateTime)
 
