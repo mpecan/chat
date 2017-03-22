@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import si.pecan.UserNotAllowedToAccessChat
 import si.pecan.dto.ChatRoom
+import si.pecan.dto.Message
 import si.pecan.model.InstantMessage
 import si.pecan.services.ChatService
 import si.pecan.services.UserService
@@ -53,8 +54,8 @@ open class ChatServiceTests {
 
     @Test
     fun postToChat() {
-        val chat :ChatRoom= newChat()
-        val message: InstantMessage = chatService.postMessage(USER1, chat.id, "Message content here")
+        val chat: ChatRoom = newChat()
+        val message: Message = chatService.postMessage(USER1, chat.id, "Message content here")
         message.id.should.not.be.`null`
     }
 
