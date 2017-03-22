@@ -1,5 +1,6 @@
 package si.pecan.model
 
+import java.time.LocalDateTime
 import javax.persistence.*
 
 /**
@@ -15,6 +16,8 @@ class User : EntityBase() {
     lateinit var username: String
 
     var active: Boolean = false
+
+    var lastActive: LocalDateTime = LocalDateTime.now()
 
     @ManyToMany(mappedBy = "users")
     var chatRooms: List<ChatRoom> = listOf()

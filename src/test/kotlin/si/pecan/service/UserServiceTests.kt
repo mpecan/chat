@@ -37,7 +37,7 @@ open class UserServiceTests {
 
     @Test
     fun testGetUsers() {
-        arrayListOf("user", "user2", "user3").map { userService.getOrCreate(it) }
+        arrayListOf("username", "user2", "user3").map { userService.getOrCreate(it) }
         val all = userService.getAll()
         all.size.should.equal(3)
     }
