@@ -2,7 +2,6 @@ package si.pecan.websocket
 
 import com.winterbe.expekt.should
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,9 +12,7 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler
 import org.springframework.messaging.simp.stomp.StompHeaders
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter
 import org.springframework.scheduling.TaskScheduler
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import org.springframework.web.socket.messaging.WebSocketStompClient
 import org.springframework.web.socket.sockjs.client.SockJsClient
@@ -24,7 +21,6 @@ import si.pecan.ChatApplication
 import si.pecan.ChatRoomRepository
 import si.pecan.InstantMessageRepository
 import si.pecan.UserRepository
-import si.pecan.controller.ChatControllerTests
 import si.pecan.controller.ControllerTestBase
 import si.pecan.dto.ChatRoom
 import si.pecan.dto.Message
