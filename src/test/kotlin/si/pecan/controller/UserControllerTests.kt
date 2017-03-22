@@ -21,6 +21,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentati
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import si.pecan.dto.GetUserInfoRequest
+import si.pecan.dto.GetUserInfoResponse
 import javax.transaction.Transactional
 
 /**
@@ -60,6 +61,8 @@ open class UserControllerTests {
                 )
         ).andExpect {
             it.response.status.should.equal(200)
+            val responseObject = mapper.readValue(it.response.contentAsString, GetUserInfoResponse::class.java)
+            responseObject.id.should.not.be.`null`
         }
     }
 }
