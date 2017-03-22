@@ -22,6 +22,7 @@ class ChatService(private val userRepository: UserRepository,
             users = arrayListOf(initiator, target)
             createdBy = initiator
         })
+
         return chatRoom.id!!
     }
 

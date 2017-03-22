@@ -35,30 +35,7 @@ import javax.transaction.Transactional
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional
-open class UserControllerTests {
-
-    lateinit var mockMvc: MockMvc
-
-    val mapper = jacksonObjectMapper().apply {
-        propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
-        registerModule(JavaTimeModule())
-    }
-
-    @Autowired
-    lateinit var context: WebApplicationContext
-
-    @Autowired
-    lateinit var userService: UserService
-
-    @get:Rule
-    var restDocumentation = JUnitRestDocumentation("build/generated-snippets")
-
-    @Before
-    fun setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply<DefaultMockMvcBuilder>(documentationConfiguration(this.restDocumentation))
-                .build()
-    }
+open class UserControllerTests : ControllerTestBase() {
 
     @Test
     fun getUser() {
@@ -92,7 +69,7 @@ open class UserControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user").param("username", "username"))
                 .andExpect(status().isOk)
                 .andExpect {
-                    val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>(){})
+                    val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>() {})
                     result.size.should.be.above(1)
                     result.forEach { user ->
                         users.any { it.username == user.username }.should.equal(true)
@@ -111,7 +88,7 @@ open class UserControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user").param("username", "username"))
                 .andExpect(status().isOk)
                 .andExpect {
-                    val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>(){})
+                    val result: List<User> = mapper.readValue(it.response.contentAsString, object : TypeReference<List<User>>() {})
                     result.size.should.be.above(1)
                     // First user is skipped as it is the requesting user
                     // Order should be reversed from the insert order
