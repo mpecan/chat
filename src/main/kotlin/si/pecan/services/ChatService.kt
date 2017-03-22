@@ -9,6 +9,7 @@ import si.pecan.dto.ChatRoom as Dto
 import si.pecan.model.InstantMessage
 import si.pecan.model.User
 import java.util.*
+import javax.transaction.Transactional
 
 /**
  * Created by matjaz on 3/21/17.
@@ -19,6 +20,7 @@ class ChatService(private val userRepository: UserRepository,
                   private val instantMessageRepository: InstantMessageRepository) {
 
 
+    @Transactional
     fun getOrCreateChat(initiatorUsername: String, targetUsername: String): Dto {
         val initiator = userRepository.findByUsername(initiatorUsername) ?: throw UserNotFound()
         val target = userRepository.findByUsername(targetUsername) ?: throw UserNotFound()
@@ -37,6 +39,7 @@ class ChatService(private val userRepository: UserRepository,
         )
     }
 
+    @Transactional
     fun postMessage(username: String, chatId: UUID, messageContent: String): Message {
         val chat = chatRoomRepository.findOne(chatId) ?: throw ChatNotFound()
         val user = chat.users.find { it.username == username } ?: throw UserNotAllowedToAccessChat()
@@ -44,6 +47,6 @@ class ChatService(private val userRepository: UserRepository,
             room = chat
             content = messageContent
             postedBy = user
-        }).toDto()
+        }).toDto().apply { this.chatId = chatId }
     }
 }

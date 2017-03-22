@@ -49,12 +49,7 @@ open class ChatControllerTests: ControllerTestBase() {
 
     @Test
     fun testPostMessage() {
-        val initiator = "user"
-        val target = "target"
-
-        val users = arrayOf(initiator, target).map(userService::getOrCreate)
-
-        val chatRoom = chatService.getOrCreateChat(initiator, target)
+        val (initiator, chatRoom) = createChatRoom()
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/chat/message")
@@ -69,8 +64,15 @@ open class ChatControllerTests: ControllerTestBase() {
                 }
     }
 
+     protected fun createChatRoom(): Pair<String, ChatRoom> {
+        val initiator = "user"
+        val target = "target"
 
+        val users = arrayOf(initiator, target).map(userService::getOrCreate)
 
+        val chatRoom = chatService.getOrCreateChat(initiator, target)
+        return Pair(initiator, chatRoom)
+    }
 
 
 }

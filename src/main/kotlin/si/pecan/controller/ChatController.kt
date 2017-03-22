@@ -1,6 +1,8 @@
 package si.pecan.controller
 
 import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.web.bind.annotation.*
 import si.pecan.dto.PostMessageRequest
 import si.pecan.services.ChatService
