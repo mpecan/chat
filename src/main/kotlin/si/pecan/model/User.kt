@@ -3,9 +3,7 @@ package si.pecan.model
 import java.time.LocalDateTime
 import javax.persistence.*
 
-/**
- * Created by matjaz on 3/18/17.
- */
+
 @Entity
 @Table(name = "users", indexes = arrayOf(
         Index(name = "users_username_unique", columnList = "username", unique = true)

@@ -10,9 +10,7 @@ import si.pecan.model.User
 import si.pecan.services.UserService
 import javax.transaction.Transactional
 
-/**
- * Created by matjaz on 3/21/17.
- */
+
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)

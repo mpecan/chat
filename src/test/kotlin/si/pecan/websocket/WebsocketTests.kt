@@ -31,9 +31,7 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by matjaz on 3/14/17.
- */
+
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(ChatApplication::class), webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 open class WebsocketTests :ControllerTestBase() {

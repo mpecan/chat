@@ -6,9 +6,7 @@ import si.pecan.UserRepository
 import si.pecan.model.User
 import java.time.LocalDateTime
 
-/**
- * Created by matjaz on 3/21/17.
- */
+
 @Service
 class UserService(private val userRepository: UserRepository) {
     @Transactional

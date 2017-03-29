@@ -12,9 +12,7 @@ import si.pecan.model.ChatRoom
 import si.pecan.model.InstantMessage
 import javax.transaction.Transactional
 
-/**
- * Created by matjaz on 3/21/17.
- */
+
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional

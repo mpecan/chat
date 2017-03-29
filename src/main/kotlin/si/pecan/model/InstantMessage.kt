@@ -6,9 +6,7 @@ import javax.persistence.Entity
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 
-/**
- * Created by matjaz on 3/18/17.
- */
+
 @Entity
 @Table(name="instant_messages")
 class InstantMessage : EntityBase() {

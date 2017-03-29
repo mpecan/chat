@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*
 import si.pecan.dto.PostMessageRequest
 import si.pecan.services.ChatService
 
-/**
- * Created by matjaz on 3/16/17.
- */
+
 @RestController
 @RequestMapping("/api/chat")
 class ChatController(private val chatService: ChatService) {
