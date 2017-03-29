@@ -109,8 +109,11 @@ export default class Dashboard extends Component {
                     <ul>
                         {users.filter((current) => current.username !== user.username).map((current) => {
                             console.log(current);
-                            const chatRoom = chatRooms.find((chat) => [chat.get('initiator'), chat.get('target')].map((user) => user.username).includes(current.username));
-                            return <UserItem isCurrent={!!chatRoom}  _onClick={this.joinRoom} item={current} chatroom={chatRoom}/>;
+                            const chatRoom = chatRooms.find(
+                                (room) => {
+                                    return [room.get('initiator'), room.get('target')].map((user) => user.username).includes(current.username);
+                                });
+                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat}  _onClick={this.joinRoom} item={current} chatroom={chatRoom}/>;
                         })}
                     </ul>
                 </div>
