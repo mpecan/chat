@@ -42,14 +42,12 @@ export default class Dashboard extends Component {
     constructor(props) {
         super(props);
 
-
-        this.handleAsyncButtonClick = this.handleAsyncButtonClick.bind(this);
-        this.handleTestButtonClick = this.handleTestButtonClick.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleUsernameSet = this.handleUsernameSet.bind(this);
         this.handleTargetChange = this.handleTargetChange.bind(this);
         this.handleJoinRoom = this.handleJoinRoom.bind(this);
         this.joinRoom = this.joinRoom.bind(this);
+        this.handleKeyPress= this.handleKeyPress.bind(this);
     }
 
     componentWillMount() {
@@ -62,18 +60,6 @@ export default class Dashboard extends Component {
         dispatch(getUsers())
     }
 
-    handleAsyncButtonClick() {
-        const {dispatch} = this.props;
-
-        dispatch(testAsync());
-    }
-
-    handleTestButtonClick() {
-        const {dispatch} = this.props;
-
-        dispatch(testAction());
-    }
-
     handleUsernameChange(event) {
         this.setState({usernameField: event.target.value});
     }
@@ -82,6 +68,13 @@ export default class Dashboard extends Component {
         const {dispatch} = this.props;
         dispatch(setUsername(this.state.usernameField));
     }
+
+    handleKeyPress(event) {
+        if(event.key === 'Enter'){
+            this.handleUsernameSet();
+        }
+    };
+
     handleTargetChange(event) {
         this.setState({targetUser: event.target.value});
     }
@@ -128,7 +121,7 @@ export default class Dashboard extends Component {
             </div>: <div>
                 <label>
                     Username:
-                    <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField}/>
+                    <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField} onKeyPress={this.handleKeyPress}/>
                     <button
                         disabled={asyncLoading}
                         onClick={this.handleUsernameSet}
