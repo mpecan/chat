@@ -2,7 +2,7 @@
   "name": "react-redux-webpack2-boilerplate",
   "version": "0.1.1",
   "private": false,
-  "license": "MIT",
+  "license": "APACHE 2.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -71,7 +71,7 @@
   "description": "Starter boilerplate for React and Redux, using Webpack 2",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Stanko/react-redux-webpack2-boilerplate.git"
+    "url": "git+ssh://git@github.com/mpecan/chat.git"
   },
   "keywords": [
     "react",
@@ -79,11 +79,11 @@
     "webpack2",
     "boilerplate"
   ],
-  "author": "Stanko",
+  "author": "Matjaž Domen Pečan",
   "bugs": {
-    "url": "https://github.com/Stanko/react-redux-webpack2-boilerplate/issues"
+    "url": "https://github.com/mpecan/chat/issues"
   },
-  "homepage": "https://github.com/Stanko/react-redux-webpack2-boilerplate#readme",
+  "homepage": "https://github.com/mpecan/chat#readme",
   "prepush": [
     "npm run lint-break-on-errors --silent"
   ]
