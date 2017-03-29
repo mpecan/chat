@@ -101,9 +101,6 @@ export default class Dashboard extends Component {
         const room = chatRooms.get(currentChat);
         return (
             <div>{ user ? <div className='Dashboard'>
-
-
-                <div>Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
                 <div className="Users">
                     Available users:
                     <ul>
@@ -118,7 +115,8 @@ export default class Dashboard extends Component {
                     </ul>
                 </div>
 
-                <hr />
+                <div>Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
+
                 {room && <Chat item={room} user={user.username}/> }
 
             </div>: <div>

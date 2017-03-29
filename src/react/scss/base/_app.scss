@@ -3,71 +3,57 @@ body {
 }
 
 #root {
-  margin-left: 260px;
 }
 
 .App {
-  margin: 0;
-  width: calc(100% - 40px);
+  margin: 20px auto;
+  min-height: 600px;
+  width: 960px;
   background: #f5f6f7;
   padding: 20px;
-  padding-left: 30px;
-  border-radius: 3px;
+  box-shadow: 10px 10px 20px black;
 }
 
 .Users {
-  width: 15%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  background-color: #dddddd;
-  margin: 0;
-  border-radius: 3px;
+  padding: 10px;
+  margin-right: 20px;
+  width: 240px;
   height: 100%;
-  padding: 20px;
+  float: left;
+  background: #e2e2e2;
   ul {
     list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    li {
+      display: block;
+      width: 100%;
+      background: white;
+      color: #666;
+      padding: 5px 10px;
+      margin-bottom: 5px;
+    }
+    li:hover {
+      color: #f5f6f7;
+      background: #666666;
+      cursor: pointer;
+    }
     li.active {
-      color: darkgreen;
+      background: #663399;
+      color: #f5f6f7;
     }
   }
 }
 
 .Dashboard {
-  height: 100%;
-  width: 85%;
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: #f5f6f7;
-  padding: 20px;
 }
 
 .Chat {
-  position: relative;
   label {
-    clear: both;
-    float: left;
-    width: 100%;
-    padding: 20px;
     textarea {
-      width: 100%;
-      margin: 10px 0;
-      height: 4em;
     }
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
   }
-
-  height: 95%;
-  background: #f5f6f7;
   .Messages {
-     max-height: 90%;
-    overflow-y: scroll;
     .Message {
       width: 60%;
       padding: 10px;
