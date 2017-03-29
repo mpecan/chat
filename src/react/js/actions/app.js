@@ -21,14 +21,6 @@ export const GOT_USER = "GOT_USER";
 export const FAILED_TO_GET_USERS = "FAILED_TO_GET_USERS";
 
 
-// Test action
-
-export function testAction() {
-    return {
-        type: TEST_ACTION,
-    };
-}
-
 function setUsernameStart(username) {
     return {
         type: SET_USERNAME,

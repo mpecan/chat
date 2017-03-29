@@ -7,7 +7,7 @@ body {
 }
 
 .App {
-  margin: 20px auto;
+  margin: 0;
   width: calc(100% - 40px);
   background: #f5f6f7;
   padding: 20px;
@@ -16,13 +16,14 @@ body {
 }
 
 .Users {
-  width: 270px;
+  width: 15%;
+  min-width: 280px;
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
   background-color: #dddddd;
-  margin: 20px;
+  margin: 0;
   border-radius: 3px;
   height: 100%;
   padding: 20px;
@@ -32,6 +33,86 @@ body {
       color: darkgreen;
     }
   }
+}
+
+.Dashboard {
+  height: 100%;
+  width: 85%;
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #f5f6f7;
+  padding: 20px;
+}
+
+.Chat {
+  position: relative;
+  label {
+    clear: both;
+    float: left;
+    width: 100%;
+    padding: 20px;
+    textarea {
+      width: 100%;
+      margin: 10px 0;
+      height: 4em;
+    }
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  height: 95%;
+  background: #f5f6f7;
+  .Messages {
+     max-height: 90%;
+    overflow-y: scroll;
+    .Message {
+      width: 60%;
+      padding: 10px;
+      float: left;
+      clear: both;
+      padding-left: 100px;
+
+      > div {
+        display: inline-block;
+      }
+
+      .User {
+        margin: 0 10px;
+      }
+      .Date {
+        font-size: 0.7em;
+        margin-bottom: 5px;
+      }
+
+      .Bubble {
+        max-width: 90%;
+        padding: 20px;
+        -webkit-box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
+        box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
+        background-color: lightgreen;
+        .Text {
+          text-align: justify;
+        }
+      }
+
+      &.Current {
+        .Bubble {
+          background-color: orange;
+        }
+        float: right;
+        text-align: right;
+        padding-left: 0;
+        padding-right: 100px;
+      }
+
+    }
+  }
+
 }
 
 .Menu a {

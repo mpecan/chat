@@ -43,13 +43,15 @@ export default class Chat extends Component {
             user,
         } = this.props;
 
-        const sorted = _.chain(item.get('messages').toJS()).map((value, key) => value).sort((one, other) => one.created.diff(other.created, "seconds")).map((message) => <Message key={message.id} item={message} currentUser={user === message.posted_by}/>).value();
+        const sorted = _.chain(item.get('messages').toJS()).map((value, key) => value).sort((one, other) => one.created.diff(other.created, "seconds")).map((message) => <Message key={message.id} item={message} currentUser={user !== message.poster}/>).value();
 
         return (
             <div className="Chat">
+                <div className="Messages">
                 {sorted}
+                </div>
                 <label>Write message:
-                <input value={this.state.message} onChange={this.messageChange} type="textarea" />
+                <textarea value={this.state.message} onChange={this.messageChange} />
                     <button onClick={this.onClick}>Send</button>
                 </label>
             </div>

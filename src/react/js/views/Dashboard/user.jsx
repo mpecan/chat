@@ -28,7 +28,7 @@ export default class UserItem extends Component {
 
         return (
             <li className={isCurrent ? "active" : null} onClick={this.onClick}>{item.username} {chatroom &&
-            <span>✔</span>}</li>
+            <span>⏱</span>}</li>
         );
     }
 }

@@ -49,7 +49,6 @@ ReactDOM.render(
       <Routes /> :
       <div>
         <Routes />
-        <DevTools />
       </div> }
   </Provider>,
   document.getElementById('root')

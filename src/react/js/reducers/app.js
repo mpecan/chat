@@ -59,8 +59,8 @@ const actionsMap = {
 
     [ROOM_JOINED]: (state, action) => {
         return state.withMutations((input) => {
-            input.mergeIn(["chatRooms"],{[action.target]: Map(new ChatRoom(action.data))});
-            input.set("currentChat", action.target);
+            input.mergeIn(["chatRooms"],{[action.data.id]: Map(new ChatRoom(action.data))});
+            input.set("currentChat", action.data.id);
         });
     },
 
@@ -78,12 +78,8 @@ const actionsMap = {
     [MESSAGE_RECEIVED]: (state, action) => {
         let data = JSON.parse(action.message.body);
         let currentChat = data.chat_id;
-        let currentTarget = state.get('chatRooms').find((val) => val.get('id') === currentChat);
-        let user = currentTarget.get('target').username !== data.poster ? currentTarget.get('target').username : currentTarget.get('initiator').username;
         data.created = moment(data.created);
-        let map = {};
-        map[data.id] = data;
-        return state.mergeIn(['chatRooms', user , 'messages'], map);
+        return state.mergeIn(['chatRooms', currentChat , 'messages'], {[data.id]: data});
     },
 
 };

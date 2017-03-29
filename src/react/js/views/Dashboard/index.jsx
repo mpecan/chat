@@ -92,17 +92,14 @@ export default class Dashboard extends Component {
 
     joinRoom(target) {
         const {dispatch, user, chatRooms} = this.props;
-        if (!chatRooms.get(this.state.targetUser)) {
+        if (!chatRooms.find((chat) => [chat.get('initiator'), chat.get('target')].some((user) => user.username).includes(this.state.targetUser))) {
             dispatch(getChatRoom(user.username, target));
         }
     }
 
     render() {
         const {
-            asyncData,
-            asyncError,
             asyncLoading,
-            counter,
             user,
             users,
             chatRooms,
@@ -113,13 +110,14 @@ export default class Dashboard extends Component {
             <div>{ user ? <div className='Dashboard'>
 
 
-                <div>Current user: { user && <span> {user.username }</span> }</div>
+                <div>Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
                 <div className="Users">
-                    Users:
+                    Available users:
                     <ul>
-                        {users.map((current) => {
+                        {users.filter((current) => current.username !== user.username).map((current) => {
                             console.log(current);
-                            return <UserItem isCurrent={current.username == currentChat}  _onClick={this.joinRoom} item={current} chatroom={chatRooms.get(current.username)}/>;
+                            const chatRoom = chatRooms.find((chat) => [chat.get('initiator'), chat.get('target')].map((user) => user.username).includes(current.username));
+                            return <UserItem isCurrent={!!chatRoom}  _onClick={this.joinRoom} item={current} chatroom={chatRoom}/>;
                         })}
                     </ul>
                 </div>
