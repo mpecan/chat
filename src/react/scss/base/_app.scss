@@ -1,5 +1,11 @@
-body {
+html,body {
   background: #1C1E20;
+
+  height: 100%;
+  overflow: hidden;
+}
+.group {
+  height: 100%;
 }
 
 .group:after {
@@ -9,15 +15,33 @@ body {
 }
 
 #root {
+  height: 100%;
+  > div {
+    height: 100%;
+  }
+}
+
+.UserEnter {
+  line-height: 1.2em;
+  input {
+    margin: 0 10px;
+  }
 }
 
 .App {
   margin: 20px auto;
   min-height: 600px;
+  height: calc(100% - 40px);
   width: 960px;
   background: #f5f6f7;
   padding: 20px;
   box-shadow: 10px 10px 20px black;
+  .Page {
+    height: 100%;
+    > div {
+      height: 100%;
+    }
+  }
 }
 
 .Users {
@@ -56,20 +80,60 @@ body {
 }
 
 .Dashboard {
+
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row; /* works with row or column */
+  flex-direction: row;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+  -webkit-justify-content: center;
+  justify-content: center;
+  .ChatContainer {
+    /* This will be twice as big as the small item. */
+    height:100%;
+    -webkit-flex: 3 0 0;
+    flex: 3 0 0;
+
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column; /* works with row or column */
+    flex-direction: column;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-justify-content: center;
+    justify-content: center;
+    .Greeting {
+      -webkit-flex: 1 0 0;
+      flex: 1 0 0;
+    }
+  }
+  .Users {
+    -webkit-flex: 1 0 0;
+    flex: 1 0 0;
+  }
 }
 
 .Chat {
+  -webkit-flex: 5 0 0;
+  flex: 5 0 0;
   width: 660px;
   float: left;
+  height: 95%;
   label {
     float: left;
     padding: 20px;
     width: 100%;
-
+    height: 110px;
     textarea {
+      width:100%;
+      margin: 5px 0;
     }
   }
   .Messages {
+    height: calc(100% - 110px);
+    overflow-y: scroll;
     .Message {
       width: 60%;
       padding: 10px;

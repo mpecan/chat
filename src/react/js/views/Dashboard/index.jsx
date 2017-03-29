@@ -90,6 +90,7 @@ export default class Dashboard extends Component {
         }
     }
 
+
     render() {
         const {
             asyncLoading,
@@ -110,17 +111,18 @@ export default class Dashboard extends Component {
                                 (room) => {
                                     return [room.get('initiator'), room.get('target')].map((user) => user.username).includes(current.username);
                                 });
-                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat}  _onClick={this.joinRoom} item={current} chatroom={chatRoom}/>;
+                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat }  _onClick={this.joinRoom} item={current} chatroom={chatRoom && chatRoom.get("messages").size > 0}/>;
                         })}
                     </ul>
                 </div>
 
-                <div>Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
+                <div className="ChatContainer">
+                    <div className="Greeting">Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
 
-                {room && <Chat item={room} user={user.username}/> }
-
+                    {room && <Chat item={room} user={user.username}/> }
+                </div>
             </div>: <div>
-                <label>
+                <label className="UserEnter">
                     Username:
                     <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField} onKeyPress={this.handleKeyPress}/>
                     <button

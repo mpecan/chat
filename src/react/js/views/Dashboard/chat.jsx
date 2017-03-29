@@ -45,20 +45,32 @@ export default class Chat extends Component {
         }
     };
 
+
+
+    scrollToBottom() {
+        const scrollHeight = this.messageList.scrollHeight;
+        const height = this.messageList.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
     render() {
         const {
             item,
-            user,
+            user,                                                 
         } = this.props;
 
         const sorted = _.chain(item.get('messages').toJS()).map((value, key) => value).sort((one, other) => one.created.diff(other.created, "seconds")).map((message) => <Message key={message.id} item={message} currentUser={user !== message.poster}/>).value();
 
         return (
             <div className="Chat">
-                <div className="Messages">
+                <div className="Messages" ref={(ref) => this.messageList = ref}>
                 {sorted}
                 </div>
-                <label>Write message:
+                <label>Message:
                 <textarea value={this.state.message} onChange={this.messageChange} onKeyPress={this.handleKeyPress}/>
                     <button onClick={this.onClick}>Send</button>
                 </label>
