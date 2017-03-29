@@ -42,7 +42,7 @@ function getChatRoom(username, target) {
 }
 
 
-const client = webstomp.over(new SockJS("http://localhost:8080/messages"), {heartbeat: false});
+const client = webstomp.over(new SockJS("/messages"), {heartbeat: false});
 
 
 export default {
