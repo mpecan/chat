@@ -36,7 +36,7 @@ export default class Chat extends Component {
         const {dispatch, item, user} = this.props;
         const chatId = item.get('id');
         dispatch(sendMessage(chatId,JSON.stringify({username: user, content: this.state.message, chat_id: chatId})));
-        this.state.setState({message: ""});
+        this.setState({message: ""});
     }
     
     handleKeyPress(event) {
