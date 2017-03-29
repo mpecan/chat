@@ -33,6 +33,9 @@ body {
       color: #666;
       padding: 5px 10px;
       margin-bottom: 5px;
+      span {
+        float: right;
+      }
     }
     li:hover {
       color: #f5f6f7;
