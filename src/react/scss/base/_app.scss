@@ -2,6 +2,12 @@ body {
   background: #1C1E20;
 }
 
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 #root {
 }
 
@@ -53,7 +59,13 @@ body {
 }
 
 .Chat {
+  width: 660px;
+  float: left;
   label {
+    float: left;
+    padding: 20px;
+    width: 100%;
+
     textarea {
     }
   }
@@ -80,10 +92,8 @@ body {
       .Bubble {
         max-width: 90%;
         padding: 20px;
-        -webkit-box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
-        box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
-        background-color: lightgreen;
+        background-color: #eadef8;
+        border-radius: 5px;
         .Text {
           text-align: justify;
         }
