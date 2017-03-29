@@ -92,7 +92,7 @@ export default class Dashboard extends Component {
 
     joinRoom(target) {
         const {dispatch, user, chatRooms} = this.props;
-        if (!chatRooms.find((chat) => [chat.get('initiator'), chat.get('target')].some((user) => user.username).includes(this.state.targetUser))) {
+        if (!chatRooms.find((chat) => [chat.get('initiator'), chat.get('target')].some((user) => user.username === this.state.targetUser))) {
             dispatch(getChatRoom(user.username, target));
         }
     }
