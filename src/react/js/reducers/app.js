@@ -1,50 +1,94 @@
-import { Map } from 'immutable';
-
+import {Map, Set} from 'immutable';
+import 'react/lib/update';
+import {User} from '../api/user';
+import {ChatRoom} from '../api/chat_room';
+import moment from 'moment';
 import {
-  TEST_ACTION,
-  TEST_ASYNC_ACTION_START,
-  TEST_ASYNC_ACTION_ERROR,
-  TEST_ASYNC_ACTION_SUCCESS,
+    SET_USERNAME,
+    UNSET_USERNAME,
+    USER_SET,
+    FAILED_TO_SET_USER,
+    JOIN_ROOM,
+    ROOM_JOINED,
+    FAILED_TO_JOIN_ROOM,
+    GET_USERS,
+    GOT_USERS,
+    FAILED_TO_GET_USERS,
+    GOT_USER,
+    MESSAGE_RECEIVED
 } from 'actions/app';
 
 const initialState = Map({
-  counter: 0,
-  asyncLoading: false,
-  asyncError: null,
-  asyncData: null,
+    counter: 0,
+    asyncLoading: false,
+    asyncError: null,
+    asyncData: null,
+    messages: [],
+    user: null,
+    chatRooms: Map({}),
+    users: Map({}),
+    currentChat: null
 });
 
 const actionsMap = {
-  [TEST_ACTION]: (state) => {
-    const counter = state.get('counter') + 1;
 
-    return state.merge({
-      counter,
-    });
-  },
+    [SET_USERNAME]: (state) => {
+        return state.merge({
+            asyncLoading: true,
+        })
+    },
 
-  // Async action
-  [TEST_ASYNC_ACTION_START]: (state) => {
-    return state.merge({
-      asyncLoading: true,
-      asyncError: null,
-    });
-  },
-  [TEST_ASYNC_ACTION_ERROR]: (state, action) => {
-    return state.merge({
-      asyncLoading: false,
-      asyncError: action.data,
-    });
-  },
-  [TEST_ASYNC_ACTION_SUCCESS]: (state, action) => {
-    return state.merge({
-      asyncLoading: false,
-      asyncData: action.data,
-    });
-  },
+    [FAILED_TO_SET_USER]: (state) => {
+        return state.merge({
+            asyncLoading: false,
+        });
+    },
+
+    [USER_SET]: (state, action) => {
+        return state.merge({
+            user: new User(action.user),
+            asyncLoading: false,
+        });
+    },
+
+    [UNSET_USERNAME]: (state) => {
+        return state.merge({
+            user: null
+        });
+    },
+
+    [ROOM_JOINED]: (state, action) => {
+        return state.withMutations((input) => {
+            input.mergeIn(["chatRooms"],{[action.target]: Map(new ChatRoom(action.data))});
+            input.set("currentChat", action.target);
+        });
+    },
+
+    [GOT_USERS]: (state, action) => {
+        return state.mergeIn(['users'], action.users.reduce((agg, item) => {
+            agg[item.id] = new User(item);
+            return agg;
+        }, {}));
+    },
+
+    [GOT_USER]: (state, action) => {
+        return state.mergeIn(['users'], {[action.user.id]: new User(action.user)});
+    },
+
+    [MESSAGE_RECEIVED]: (state, action) => {
+        let data = JSON.parse(action.message.body);
+        let currentChat = data.chat_id;
+        let currentTarget = state.get('chatRooms').find((val) => val.get('id') === currentChat);
+        let user = currentTarget.get('target').username !== data.poster ? currentTarget.get('target').username : currentTarget.get('initiator').username;
+        data.created = moment(data.created);
+        let map = {};
+        map[data.id] = data;
+        return state.mergeIn(['chatRooms', user , 'messages'], map);
+    },
+
 };
 
 export default function reducer(state = initialState, action = {}) {
-  const fn = actionsMap[action.type];
-  return fn ? fn(state, action) : state;
+    const fn = actionsMap[action.type];
+    return fn ? fn(state, action) : state;
 }

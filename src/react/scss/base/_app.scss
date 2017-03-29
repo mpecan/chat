@@ -2,13 +2,36 @@ body {
   background: #1C1E20;
 }
 
+#root {
+  margin-left: 260px;
+}
+
 .App {
   margin: 20px auto;
-  max-width: 500px;
   width: calc(100% - 40px);
   background: #f5f6f7;
   padding: 20px;
+  padding-left: 30px;
   border-radius: 3px;
+}
+
+.Users {
+  width: 270px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #dddddd;
+  margin: 20px;
+  border-radius: 3px;
+  height: 100%;
+  padding: 20px;
+  ul {
+    list-style: none;
+    li.active {
+      color: darkgreen;
+    }
+  }
 }
 
 .Menu a {

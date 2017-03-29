@@ -1,84 +1,144 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { testAction, testAsync } from 'actions/app';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
+import {
+    testAction,
+    testAsync,
+    setUsername,
+    client,
+    getChatRoom,
+    getUsers,
+    connectToWs
+} from 'actions/app';
 import bookImg from '../../../assets/img/book2.jpg';
+import {User} from '../../api/user'
+import UserItem from "./user";
+import Chat from './chat';
 
 @connect(state => ({
-  asyncData: state.app.get('asyncData'),
-  asyncError: state.app.get('asyncError'),
-  asyncLoading: state.app.get('asyncLoading'),
-  counter: state.app.get('counter'),
+    asyncData: state.app.get('asyncData'),
+    asyncError: state.app.get('asyncError'),
+    asyncLoading: state.app.get('asyncLoading'),
+    counter: state.app.get('counter'),
+    messages: state.app.get('messages'),
+    user: state.app.get('user'),
+    chatRooms: state.app.get('chatRooms'),
+    users: state.app.get('users'),
+    currentChat: state.app.get('currentChat'),
 }))
 export default class Dashboard extends Component {
-  static propTypes = {
-    asyncData: PropTypes.string,
-    asyncError: PropTypes.object,
-    asyncLoading: PropTypes.bool,
-    counter: PropTypes.number,
-    // from react-redux connect
-    dispatch: PropTypes.func,
-  }
+    static propTypes = {
+        asyncError: PropTypes.object,
+        asyncLoading: PropTypes.bool,
+        counter: PropTypes.number,
+        messages: PropTypes.array,
+        user: PropTypes.objectOf(User),
+        // from react-redux connect
+        dispatch: PropTypes.func,
+        chatRooms: PropTypes.object,
+        users: PropTypes.object,
+        currentChat: PropTypes.string
+    };
 
-  constructor() {
-    super();
+    constructor(props) {
+        super(props);
 
-    this.handleAsyncButtonClick = this.handleAsyncButtonClick.bind(this);
-    this.handleTestButtonClick = this.handleTestButtonClick.bind(this);
-  }
 
-  handleAsyncButtonClick() {
-    const { dispatch } = this.props;
+        this.handleAsyncButtonClick = this.handleAsyncButtonClick.bind(this);
+        this.handleTestButtonClick = this.handleTestButtonClick.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handleUsernameSet = this.handleUsernameSet.bind(this);
+        this.handleTargetChange = this.handleTargetChange.bind(this);
+        this.handleJoinRoom = this.handleJoinRoom.bind(this);
+        this.joinRoom = this.joinRoom.bind(this);
+    }
 
-    dispatch(testAsync());
-  }
+    componentWillMount() {
+        this.state = {usernameField: "", targetUser: ""};
+    }
 
-  handleTestButtonClick() {
-    const { dispatch } = this.props;
+    componentDidMount(){
+        const {dispatch} = this.props;
+        dispatch(connectToWs());
+        dispatch(getUsers())
+    }
 
-    dispatch(testAction());
-  }
+    handleAsyncButtonClick() {
+        const {dispatch} = this.props;
 
-  render() {
-    const {
-      asyncData,
-      asyncError,
-      asyncLoading,
-      counter,
-    } = this.props;
+        dispatch(testAsync());
+    }
 
-    return (
-      <div className='Dashboard'>
-        <h2>Examples</h2>
-        <hr />
-        <div>
-          <h3>Synchronous action</h3>
-          <p>{ counter }</p>
-          <button onClick={ this.handleTestButtonClick }>
-            Increase counter
-          </button>
-        </div>
-        <hr />
-        <div>
-          <h3>Async action example</h3>
-          <p>{ asyncData }</p>
-          { asyncLoading && <p>Loading...</p> }
-          { asyncError && <p>Error: { asyncError }</p> }
-          <button
-            disabled={ asyncLoading }
-            onClick={ this.handleAsyncButtonClick }
-          >
-            Get async data
-          </button>
-        </div>
-        <hr />
-        <div>
-          <h3>Background image</h3>
-          <div className='BackgroundImgExample' />
+    handleTestButtonClick() {
+        const {dispatch} = this.props;
 
-          <h3>Image imported to the component</h3>
-          <img src={ bookImg } alt='' className='ImgExample' />
-        </div>
-      </div>
-    );
-  }
+        dispatch(testAction());
+    }
+
+    handleUsernameChange(event) {
+        this.setState({usernameField: event.target.value});
+    }
+
+    handleUsernameSet() {
+        const {dispatch} = this.props;
+        dispatch(setUsername(this.state.usernameField));
+    }
+    handleTargetChange(event) {
+        this.setState({targetUser: event.target.value});
+    }
+
+    handleJoinRoom() {
+        this.joinRoom(this.state.targetUser);
+    }
+
+    joinRoom(target) {
+        const {dispatch, user, chatRooms} = this.props;
+        if (!chatRooms.get(this.state.targetUser)) {
+            dispatch(getChatRoom(user.username, target));
+        }
+    }
+
+    render() {
+        const {
+            asyncData,
+            asyncError,
+            asyncLoading,
+            counter,
+            user,
+            users,
+            chatRooms,
+            currentChat
+        } = this.props;
+        const room = chatRooms.get(currentChat);
+        return (
+            <div>{ user ? <div className='Dashboard'>
+
+
+                <div>Current user: { user && <span> {user.username }</span> }</div>
+                <div className="Users">
+                    Users:
+                    <ul>
+                        {users.map((current) => {
+                            console.log(current);
+                            return <UserItem isCurrent={current.username == currentChat}  _onClick={this.joinRoom} item={current} chatroom={chatRooms.get(current.username)}/>;
+                        })}
+                    </ul>
+                </div>
+
+                <hr />
+                {room && <Chat item={room} user={user.username}/> }
+
+            </div>: <div>
+                <label>
+                    Username:
+                    <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField}/>
+                    <button
+                        disabled={asyncLoading}
+                        onClick={this.handleUsernameSet}
+                    >Set username
+                    </button>
+                </label>
+            </div>
+            }</div>
+        );
+    }
 }
