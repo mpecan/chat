@@ -19,6 +19,7 @@ export default class Chat extends Component {
 
         this.onClick = this.onClick.bind(this);
         this.messageChange = this.messageChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentWillMount(){
@@ -35,7 +36,14 @@ export default class Chat extends Component {
         const {dispatch, item, user} = this.props;
         const chatId = item.get('id');
         dispatch(sendMessage(chatId,JSON.stringify({username: user, content: this.state.message, chat_id: chatId})));
+        this.setState({message: ""});
     }
+    
+    handleKeyPress(event) {
+        if(event.key === 'Enter'){
+            this.onClick();
+        }
+    };
 
     render() {
         const {
@@ -51,7 +59,7 @@ export default class Chat extends Component {
                 {sorted}
                 </div>
                 <label>Write message:
-                <textarea value={this.state.message} onChange={this.messageChange} />
+                <textarea value={this.state.message} onChange={this.messageChange} onKeyPress={this.handleKeyPress}/>
                     <button onClick={this.onClick}>Send</button>
                 </label>
             </div>
