@@ -41,6 +41,7 @@ export default class Chat extends Component {
     
     handleKeyPress(event) {
         if(event.key === 'Enter'){
+            event.preventDefault();
             this.onClick();
         }
     };
@@ -56,6 +57,7 @@ export default class Chat extends Component {
 
     componentDidUpdate() {
         this.scrollToBottom();
+        this.textBox.focus();
     }
     render() {
         const {
@@ -71,7 +73,7 @@ export default class Chat extends Component {
                 {sorted}
                 </div>
                 <label>Message:
-                <textarea value={this.state.message} onChange={this.messageChange} onKeyPress={this.handleKeyPress}/>
+                <textarea value={this.state.message} onChange={this.messageChange} onKeyPress={this.handleKeyPress} ref={(ref) => this.textBox = ref}/>
                     <button onClick={this.onClick}>Send</button>
                 </label>
             </div>
