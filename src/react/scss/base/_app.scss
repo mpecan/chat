@@ -124,6 +124,13 @@ body {
   -webkit-justify-content: center;
   justify-content: center;
   .ChatContainer {
+    margin-top: 1px;
+    .Title {
+      width: 100%;
+      text-align: center;
+      background-color: orange;
+      line-height: 2.0em;
+    }
     /* This will be twice as big as the small item. */
     height:100%;
     -webkit-flex: 3 0 auto;
@@ -137,7 +144,7 @@ body {
     align-items: flex-start;
     -webkit-justify-content: center;
     justify-content: center;
-    .Greeting {
+    .Greeting, div {
       -webkit-flex: 1 0 auto;
       flex: 1 0 auto;
     }

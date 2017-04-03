@@ -47,18 +47,18 @@ export default class Dashboard extends Component {
         this.handleTargetChange = this.handleTargetChange.bind(this);
         this.handleJoinRoom = this.handleJoinRoom.bind(this);
         this.joinRoom = this.joinRoom.bind(this);
-        this.handleKeyPress= this.handleKeyPress.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentWillMount() {
         this.state = {usernameField: "", targetUser: ""};
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const {dispatch} = this.props;
-        if(window.sessionStorage) {
+        if (window.sessionStorage) {
             let username = window.sessionStorage.getItem("username");
-            if(username) {
+            if (username) {
                 dispatch(setUsername(username));
             }
         }
@@ -74,7 +74,7 @@ export default class Dashboard extends Component {
     }
 
     handleKeyPress(event) {
-        if(event.key === 'Enter'){
+        if (event.key === 'Enter') {
             this.handleUsernameSet();
         }
     };
@@ -107,7 +107,7 @@ export default class Dashboard extends Component {
         return (
             <div>{ user ? <div className='Dashboard'>
                 <div className="Users">
-                    Available users:
+                    Hello { user && <span> {user.username }</span> }. Choose a user below:
                     <ul>
                         {users.filter((current) => current.username !== user.username).map((current) => {
                             const chatRoom = chatRooms.find(
@@ -115,20 +115,19 @@ export default class Dashboard extends Component {
                                     return [room.get('initiator'), room.get('target')].map((user) => user.username).includes(current.username);
                                 });
 
-                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat }  _onClick={this.joinRoom} item={current} chatRoom={chatRoom}/>;
+                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat }
+                                             _onClick={this.joinRoom} item={current} chatRoom={chatRoom}/>;
                         })}
                     </ul>
                 </div>
+                {room ? <Chat item={room} user={user.username}/> :
+                    <div className="ChatContainer"><div>Select a user to chat with on the left</div></div> }
 
-                <div className="ChatContainer">
-                    <div className="Greeting">Hello { user && <span> {user.username }</span> }, select a user to chat with on the left.</div>
-
-                    {room && <Chat item={room} user={user.username}/> }
-                </div>
-            </div>: <div>
+            </div> : <div>
                 <label className="UserEnter">
                     Username:
-                    <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField} onKeyPress={this.handleKeyPress}/>
+                    <input type="text" onChange={this.handleUsernameChange} value={this.state.usernameField}
+                           onKeyPress={this.handleKeyPress}/>
                     <button
                         disabled={asyncLoading}
                         onClick={this.handleUsernameSet}
