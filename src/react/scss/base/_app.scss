@@ -175,18 +175,25 @@ body {
     height: calc(100% - 110px);
     overflow-y: scroll;
     .Message {
-      width: 60%;
+
+      -webkit-flex-direction: row; /* works with row or column */
+      flex-direction: row;
+      -webkit-align-items: flex-start;
+      align-items: flex-start;
+      -webkit-justify-content: center;
+      justify-content: center;
+      max-width: 90%;
+      clear: both;
       padding: 10px;
       float: left;
-      clear: both;
-      padding-left: 100px;
 
       > div {
-        display: inline-block;
+        -webkit-flex: 1 0 auto;
+        flex: 1 0 auto;
       }
 
       .User {
-        margin: 0 10px;
+        margin: 10px 10px 0;
       }
       .Date {
         font-size: 0.7em;
@@ -194,6 +201,9 @@ body {
       }
 
       .Bubble {
+        margin: 0 20px;
+        -webkit-flex: 5 0 auto;
+        flex: 5 0 auto;
         max-width: 90%;
         padding: 20px;
         background-color: #eadef8;
@@ -204,13 +214,13 @@ body {
       }
 
       &.Current {
+        float: right;
+
         .Bubble {
           background-color: orange;
         }
-        float: right;
         text-align: right;
         padding-left: 0;
-        padding-right: 100px;
       }
 
     }
