@@ -1,5 +1,6 @@
 package si.pecan.services
 
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Service
 import si.pecan.*
 import si.pecan.dto.Message
@@ -16,7 +17,8 @@ import kotlin.experimental.and
 @Service
 class ChatService(private val userRepository: UserRepository,
                   private val chatRoomRepository: ChatRoomRepository,
-                  private val instantMessageRepository: InstantMessageRepository) {
+                  private val instantMessageRepository: InstantMessageRepository,
+                  private val simpMessagingTemplate: SimpMessagingTemplate) {
 
 
     @Transactional
@@ -27,8 +29,9 @@ class ChatService(private val userRepository: UserRepository,
             users = arrayListOf(initiator, target)
             createdBy = initiator
         })
-
-        return chatRoom.toDto()
+        val theDto = chatRoom.toDto()
+        chatRoom.users.forEach { simpMessagingTemplate.convertAndSend("/topic/rooms/${it.username}", theDto) }
+        return theDto
     }
 
     fun ChatRoom.toDto(): si.pecan.dto.ChatRoom {

@@ -39,6 +39,8 @@ open class WebsocketTests :ControllerTestBase() {
     companion object {
         val WEBSOCKET_URI = "ws://localhost:{port}/messages"
         val WEBSOCKET_TOPIC = "/topic"
+        val USER = "user"
+        val TARGET = "target"
     }
 
     private fun getUri() = WEBSOCKET_URI.replace("{port}", port.toString())
@@ -74,8 +76,8 @@ open class WebsocketTests :ControllerTestBase() {
         client.start()
     }
     protected fun createChatRoom(): Pair<String, ChatRoom> {
-        val initiator = "user"
-        val target = "target"
+        val initiator = USER
+        val target = TARGET
 
         val users = arrayOf(initiator, target).map(userService::getOrCreate)
 
@@ -86,7 +88,6 @@ open class WebsocketTests :ControllerTestBase() {
     fun shouldReceiveMessageFromServer() {
         val (initiator, chatRoom) = createChatRoom()
         val session = client.connect(getUri(), object: StompSessionHandlerAdapter(){}).get(1, TimeUnit.SECONDS)
-        session.setAutoReceipt(true)
         session.subscribe("/topic/post/${chatRoom.id}", handler)
 
         val message = "Test"
@@ -101,6 +102,37 @@ open class WebsocketTests :ControllerTestBase() {
         id.should.not.be.`null`
         chatId.should.equal(chatRoom.id)
     }
+
+    @Test
+    fun shouldReceiveMessageAboutChatroom() {
+        userService.getOrCreate(USER)
+        val session = client.connect(getUri(), object: StompSessionHandlerAdapter(){}).get(1, TimeUnit.SECONDS)
+        session.subscribe("/topic/rooms/${USER}", handler)
+        val(iniator, chatRoom) = createChatRoom()
+        val value = queue.poll(8, TimeUnit.SECONDS)
+        value.should.not.be.`null`
+        assertionsForChatroom(value)
+    }
+
+    @Test
+    fun targetUserShouldReceiveMessageAboutChatroom() {
+        userService.getOrCreate(TARGET)
+        val session = client.connect(getUri(), object: StompSessionHandlerAdapter(){}).get(1, TimeUnit.SECONDS)
+        session.subscribe("/topic/rooms/${TARGET}", handler)
+        val(iniator, chatRoom) = createChatRoom()
+        val value = queue.poll(8, TimeUnit.SECONDS)
+        value.should.not.be.`null`
+        assertionsForChatroom(value)
+    }
+
+    private fun assertionsForChatroom(value: String){
+        val chatRoom = mapper.readValue(value, ChatRoom::class.java)
+        chatRoom.initiator.username.should.equal(USER)
+        chatRoom.target.username.should.equal(TARGET)
+
+    }
+
+
 
     @After
     fun tearDown() {
