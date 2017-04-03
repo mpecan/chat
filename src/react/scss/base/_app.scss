@@ -61,6 +61,7 @@ body {
     padding: 0;
     li {
       line-height: 1.1em;
+      min-height: 2.8em;
       display: block;
       width: 100%;
       background: white;
@@ -70,13 +71,38 @@ body {
       span {
         float: right;
       }
+      > div {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row; /* works with row or column */
+        flex-direction: row;
+        -webkit-align-items: flex-start;
+        align-items: flex-start;
+        div {
+          -webkit-flex: 1 0 auto ;
+          flex: 1 0 auto ;
+          &.Time {
+            font-size: 0.7em;
+            text-align: right;
+          }
+          &.Message {
+            border-top: solid 1px #c0c0c0;
+            padding-top: 4px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
+            overflow: hidden;
+          }
+        }
+      }
     }
     li:hover {
       color: #f5f6f7;
       background: #666666;
       cursor: pointer;
     }
-    li.hasRoom {
+    li.hasRoom .Username {
       font-weight: bold;
     }
     li.active {
@@ -100,8 +126,8 @@ body {
   .ChatContainer {
     /* This will be twice as big as the small item. */
     height:100%;
-    -webkit-flex: 3 0 0;
-    flex: 3 0 0;
+    -webkit-flex: 3 0 auto;
+    flex: 3 0 auto;
 
     display: -webkit-flex;
     display: flex;
@@ -112,19 +138,19 @@ body {
     -webkit-justify-content: center;
     justify-content: center;
     .Greeting {
-      -webkit-flex: 1 0 0;
-      flex: 1 0 0;
+      -webkit-flex: 1 0 auto;
+      flex: 1 0 auto;
     }
   }
   .Users {
-    -webkit-flex: 1 0 0;
-    flex: 1 0 0;
+    -webkit-flex: 1 0 auto;
+    flex: 1 0 auto;
   }
 }
 
 .Chat {
-  -webkit-flex: 5 0 0;
-  flex: 5 0 0;
+  -webkit-flex: 5 0 auto;
+  flex: 5 0 auto;
   width: 660px;
   float: left;
   height: 95%;
