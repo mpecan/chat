@@ -1,5 +1,6 @@
 package si.pecan.controller
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.winterbe.expekt.should
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -63,6 +64,40 @@ open class ChatControllerTests: ControllerTestBase() {
                             .should.be.an.instanceof(Message::class.java)
                 }
     }
+
+    @Test
+    fun getAllUserChatrooms() {
+        val (initatior, _) = createChatRoom()
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/all").param("username", initatior))
+                .andExpect(status().isOk)
+                .andExpect {
+                    val rooms: List<ChatRoom> = mapper.readValue(it.response.contentAsString, object: TypeReference<List<ChatRoom>>() {})
+                    rooms.should.have.a.size.equal(1)
+                    rooms.forEach{
+                        it.should.be.an.instanceof(ChatRoom::class.java)
+                    }
+                }
+    }
+
+    @Test
+    fun getAllUserRoomsWithoutOtherRooms() {
+        val (initatior, _) = createChatRoom()
+
+        val additionalUsers = arrayListOf("cookie", "clavicle").map { userService.getOrCreate(it) }
+        var anotherRoom = chatService.getOrCreateChat(additionalUsers[0].username, additionalUsers[1].username)
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/all").param("username", initatior))
+                .andExpect(status().isOk)
+                .andExpect {
+                    val rooms: List<ChatRoom> = mapper.readValue(it.response.contentAsString, object: TypeReference<List<ChatRoom>>() {})
+                    rooms.should.have.a.size.equal(1)
+                    rooms.forEach{
+                        it.should.be.an.instanceof(ChatRoom::class.java)
+                    }
+                }
+    }
+
 
      protected fun createChatRoom(): Pair<String, ChatRoom> {
         val initiator = "user"

@@ -23,7 +23,6 @@ const initialState = Map({
     asyncLoading: false,
     asyncError: null,
     asyncData: null,
-    messages: [],
     user: null,
     chatRooms: Map({}),
     users: Map({}),

@@ -10,6 +10,7 @@ import si.pecan.model.InstantMessage
 import si.pecan.model.User
 import java.util.*
 import javax.transaction.Transactional
+import kotlin.experimental.and
 
 
 @Service
@@ -27,13 +28,17 @@ class ChatService(private val userRepository: UserRepository,
             createdBy = initiator
         })
 
+        return chatRoom.toDto()
+    }
+
+    fun ChatRoom.toDto(): si.pecan.dto.ChatRoom {
         return Dto(
-                chatRoom.id!!,
-                initiator.toDto(),
-                target.toDto(),
-                chatRoom.messages.map(InstantMessage::toDto),
-                chatRoom.created,
-                if (chatRoom.messages.isEmpty()) null else chatRoom.messages.last().created
+                this.id!!,
+                this.createdBy.toDto(),
+                this.users.find { it != this.createdBy }!!.toDto(),
+                this.messages.map(InstantMessage::toDto),
+                this.created,
+                if (this.messages.isEmpty()) null else this.messages.last().created
         )
     }
 
@@ -45,6 +50,23 @@ class ChatService(private val userRepository: UserRepository,
             room = chat
             content = messageContent
             postedBy = user
+
         }).toDto().apply { this.chatId = chatId }
     }
+
+    fun getAllRooms(username: String): List<Dto> = chatRoomRepository
+            .findChatRoomIds(username)
+            .map {
+                var msb: Long = 0
+                var lsb: Long = 0
+                assert(it.size == 16) { "data must be 16 bytes in length" }
+                for (i in 0..7)
+                    msb = (msb shl 8) or (it[i].toLong() and 0xff)
+                for (i in 8..15)
+                    lsb = (lsb shl 8) or (it[i].toLong() and 0xff)
+
+                UUID(msb, lsb)
+            }
+            .let { chatRoomRepository.findAll(it) }
+            .map { it.toDto() }
 }

@@ -16,6 +16,9 @@ class ChatController(private val chatService: ChatService) {
     fun getChat(@RequestParam username: String, @RequestParam partner: String) = chatService.getOrCreateChat(username, partner)
 
 
+    @RequestMapping(value = "/all", method = arrayOf(RequestMethod.GET))
+    fun getAllRoomsForUser(@RequestParam username: String) = chatService.getAllRooms(username)
+
     @RequestMapping(value = "/message", method = arrayOf(RequestMethod.POST))
     fun sendMessage(@RequestBody messageRequest: PostMessageRequest) = chatService.postMessage(messageRequest.username, messageRequest.chatId, messageRequest.content)
 
