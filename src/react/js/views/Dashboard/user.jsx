@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {User} from '../../api/user'
 export default class UserItem extends Component {
     static propTypes = {
-        item: PropTypes.objectOf(User),
-        chatroom: PropTypes.object,
+        item: PropTypes.object,
+        chatRoom: PropTypes.object,
         _onClick: PropTypes.func,
         isCurrent: PropTypes.bool,
     };
@@ -22,12 +22,12 @@ export default class UserItem extends Component {
     render() {
         const {
             item,
-            chatroom,
+            chatRoom,
             isCurrent
         } = this.props;
 
         return (
-            <li className={isCurrent ? "active" : null} onClick={this.onClick}>{item.username} {chatroom &&
+            <li className={isCurrent ? "active" : null} onClick={this.onClick}>{item.username} {chatRoom && chatRoom.get("messages").size > 0 &&
             <span>⏱</span>}</li>
         );
     }

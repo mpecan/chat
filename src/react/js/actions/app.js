@@ -19,6 +19,7 @@ export const GETTING_USERS = "GETTING_USERS";
 export const GOT_USERS = "GOT_USERS";
 export const GOT_USER = "GOT_USER";
 export const FAILED_TO_GET_USERS = "FAILED_TO_GET_USERS";
+export const GOT_CHAT_ROOM = "GOT_CHAT_ROOM";
 
 
 function setUsernameStart(username) {
@@ -28,9 +29,17 @@ function setUsernameStart(username) {
     };
 }
 
-function userSet(username, user) {
 
-    if(window.sessionStorage){
+function userSet(username, user) {
+    return function (dispatch) {
+        dispatch(userSetEnd(username, user));
+        dispatch(connectToWs(username));
+    }
+}
+
+
+function userSetEnd(username, user) {
+    if (window.sessionStorage) {
         window.sessionStorage.setItem("username", username);
     }
     return {
@@ -40,17 +49,42 @@ function userSet(username, user) {
     };
 }
 
-export function connectToWs() {
-    return function(dispatch){
+function connectToWs(username) {
+    return function (dispatch) {
         api.client.connect({}, () => {
+            dispatch(getUsers());
             dispatch(subscribeToUsers());
+            dispatch(subscribeToChatRooms(username));
         });
 
     }
 }
 
-function subscribeToUsers() {
+function gotChatRoom(chatRoom) {
     return function(dispatch) {
+      dispatch(gotChatRoomEnd(chatRoom));
+      dispatch(subscribeToRoom(chatRoom.id));
+    };
+}
+
+function gotChatRoomEnd(chatRoom) {
+    return {
+        type: GOT_CHAT_ROOM,
+        chatRoom
+    };
+}
+
+function subscribeToChatRooms(username) {
+    return function (dispatch) {
+        api.client.subscribe("/topic/rooms/" + username, (message) => {
+            dispatch(gotChatRoom(JSON.parse(message.body)));
+        });
+    }
+}
+
+
+function subscribeToUsers() {
+    return function (dispatch) {
         api.client.subscribe("/topic/users", (message) => {
             dispatch(gotUser(message));
         })
@@ -64,12 +98,12 @@ function startChatRoomGet(target) {
     };
 }
 function roomJoined(target, data) {
-    return function(dispatch) {
+    return function (dispatch) {
         dispatch(subscribeToRoom(data.id));
         dispatch(notifyRoomJoined(target, data));
     };
 }
-function notifyRoomJoined(target, data){
+function notifyRoomJoined(target, data) {
     return {
         type: ROOM_JOINED,
         target,
@@ -91,16 +125,16 @@ function messageReceived(message) {
     }
 }
 export function subscribeToRoom(roomId) {
-    return function(dispatch) {
-        api.client.subscribe("/topic/post/"+roomId, (message) => {
+    return function (dispatch) {
+        api.client.subscribe("/topic/post/" + roomId, (message) => {
             dispatch(messageReceived(message));
         });
     };
 }
 
 
-export function sendMessage(chatRoom, message){
-    api.client.send("/app/post/"+chatRoom, message);
+export function sendMessage(chatRoom, message) {
+    api.client.send("/app/post/" + chatRoom, message);
     return {
         type: MESSAGE_SENT,
         message
@@ -113,7 +147,7 @@ function gettingUsers() {
     }
 }
 
-function gotUsers(users){
+function gotUsers(users) {
     return {
         type: GOT_USERS,
         users,
@@ -126,7 +160,7 @@ function failedToGetUsers() {
     }
 }
 
-function gotUser(user){
+function gotUser(user) {
     return {
         type: GOT_USER,
         user: JSON.parse(user.body),
@@ -134,7 +168,7 @@ function gotUser(user){
 }
 
 export function getUsers() {
-    return function(dispatch){
+    return function (dispatch) {
         dispatch(gettingUsers());
         api.getUsers()
             .then((response) => response.json()
@@ -148,9 +182,9 @@ export function getChatRoom(username, target) {
     return function (dispatch) {
         dispatch(startChatRoomGet(target));
         api.getChatRoom(username, target).then((response) => response.json().then((data) => {
-            api.client.subscribe("/topic/post/"+data.id, function(message) {
-                dispatch(messageReceived(message));
-            });
+                api.client.subscribe("/topic/post/" + data.id, function (message) {
+                    dispatch(messageReceived(message));
+                });
                 dispatch(roomJoined(target, data));
             })
         ).catch((response) => response.json()
@@ -176,26 +210,15 @@ export function setUsername(username) {
         api.getUser(username)
             .then((response) => response.json()
                 .then((data) => {
-                        dispatch(userSet(username, data))
+                        dispatch(userSet(username, data));
                     }
                 ))
-            .catch((response) => response.json()
-                .then((data) => {
-                        dispatch(failedToSetUser(username, data))
-                    }
-                ));
+            .catch((response) => {
+                    dispatch(failedToSetUser(username, response));
+                }
+            );
     };
 
-}
-
-export function testAsync() {
-    return function (dispatch) {
-        dispatch(testAsyncStart());
-
-        api.testAsync()
-            .then(data => dispatch(testAsyncSuccess(data)))
-            .catch(error => dispatch(testAsyncError(error)));
-    };
 }
 
 // Update

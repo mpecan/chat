@@ -115,7 +115,7 @@ export default class Dashboard extends Component {
                                 (room) => {
                                     return [room.get('initiator'), room.get('target')].map((user) => user.username).includes(current.username);
                                 });
-                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat }  _onClick={this.joinRoom} item={current} chatroom={chatRoom && chatRoom.get("messages").size > 0}/>;
+                            return <UserItem isCurrent={chatRoom && chatRoom.get('id') === currentChat }  _onClick={this.joinRoom} item={current} chatroom={chatRoom}/>;
                         })}
                     </ul>
                 </div>

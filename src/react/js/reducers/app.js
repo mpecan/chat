@@ -1,4 +1,4 @@
-import {Map, Set} from 'immutable';
+import {Map} from 'immutable';
 import 'react/lib/update';
 import {User} from '../api/user';
 import {ChatRoom} from '../api/chat_room';
@@ -15,7 +15,8 @@ import {
     GOT_USERS,
     FAILED_TO_GET_USERS,
     GOT_USER,
-    MESSAGE_RECEIVED
+    MESSAGE_RECEIVED,
+    GOT_CHAT_ROOM
 } from 'actions/app';
 
 const initialState = Map({
@@ -79,6 +80,13 @@ const actionsMap = {
         let currentChat = data.chat_id;
         data.created = moment(data.created);
         return state.mergeIn(['chatRooms', currentChat , 'messages'], {[data.id]: data});
+    },
+
+    [GOT_CHAT_ROOM]: (state, action) => {
+        let room = action.chatRoom;
+        return state.withMutations((input) => {
+            input.mergeIn(["chatRooms"], {[room.id]: Map(new ChatRoom(room))});
+        });
     },
 
 };
