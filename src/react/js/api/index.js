@@ -41,6 +41,12 @@ function getChatRoom(username, target) {
     })
 }
 
+function getChatRooms(username) {
+    return fetch("/api/chat/all?username="+username, {
+        method: "GET"
+    });
+}
+
 
 const client = webstomp.over(new SockJS("/messages"), {heartbeat: false});
 
@@ -48,8 +54,9 @@ const client = webstomp.over(new SockJS("/messages"), {heartbeat: false});
 export default {
     testAsync,
     getUser,
-    getChatRoom,
     getUsers,
+    getChatRoom,
+    getChatRooms,
     client: client,
     subscribe: client.subscribe,
     send: client.send,

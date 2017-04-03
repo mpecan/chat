@@ -20,6 +20,8 @@ export const GOT_USERS = "GOT_USERS";
 export const GOT_USER = "GOT_USER";
 export const FAILED_TO_GET_USERS = "FAILED_TO_GET_USERS";
 export const GOT_CHAT_ROOM = "GOT_CHAT_ROOM";
+export const GETTING_CHAT_ROOMS = "GETTING_CHAT_ROOMS";
+export const FAILED_TO_GET_CHAT_ROOMS = "FAILED_TO_GET_CHAT_ROOMS";
 
 
 function setUsernameStart(username) {
@@ -54,6 +56,7 @@ function connectToWs(username) {
         api.client.connect({}, () => {
             dispatch(getUsers());
             dispatch(subscribeToUsers());
+            dispatch(getChatRooms(username));
             dispatch(subscribeToChatRooms(username));
         });
 
@@ -61,9 +64,9 @@ function connectToWs(username) {
 }
 
 function gotChatRoom(chatRoom) {
-    return function(dispatch) {
-      dispatch(gotChatRoomEnd(chatRoom));
-      dispatch(subscribeToRoom(chatRoom.id));
+    return function (dispatch) {
+        dispatch(gotChatRoomEnd(chatRoom));
+        dispatch(subscribeToRoom(chatRoom.id));
     };
 }
 
@@ -178,6 +181,32 @@ export function getUsers() {
             .catch((data) => failedToGetUsers())
     }
 }
+
+function failedToGetChatRooms() {
+    return {
+        type: FAILED_TO_GET_CHAT_ROOMS
+    }
+}
+function gettingChatRooms() {
+    return {
+        type: GETTING_CHAT_ROOMS
+    }
+}
+export function getChatRooms(username) {
+    return function (dispatch) {
+        dispatch(gettingChatRooms());
+        api.getChatRooms(username).then((response) => response.json()
+            .then((data) => {
+                data.map((room) => {
+                    dispatch(gotChatRoom(room));
+                });
+            })
+        ).catch((data) => {
+            dispatch(failedToGetChatRooms(data))
+        })
+    };
+}
+
 export function getChatRoom(username, target) {
     return function (dispatch) {
         dispatch(startChatRoomGet(target));
