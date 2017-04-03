@@ -26,8 +26,16 @@ export default class UserItem extends Component {
             isCurrent
         } = this.props;
 
+        let classes = [];
+        if(isCurrent){
+            classes.push("active");
+        }
+        if(chatRoom) {
+            classes.push("hasRoom");
+        }
+
         return (
-            <li className={isCurrent ? "active" : null} onClick={this.onClick}>{item.username} {chatRoom && chatRoom.get("messages").size > 0 &&
+            <li className={classes} onClick={this.onClick}>{item.username} {chatRoom && chatRoom.get("messages").size > 0 &&
             <span>⏱</span>}</li>
         );
     }

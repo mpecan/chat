@@ -76,6 +76,9 @@ body {
       background: #666666;
       cursor: pointer;
     }
+    li.hasRoom {
+      font-weight: bold;
+    }
     li.active {
       background: #663399;
       color: #f5f6f7;
