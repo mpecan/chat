@@ -29,6 +29,10 @@ function setUsernameStart(username) {
 }
 
 function userSet(username, user) {
+
+    if(window.sessionStorage){
+        window.sessionStorage.setItem("username", username);
+    }
     return {
         type: USER_SET,
         username,

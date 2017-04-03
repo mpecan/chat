@@ -56,8 +56,12 @@ export default class Dashboard extends Component {
 
     componentDidMount(){
         const {dispatch} = this.props;
-        dispatch(connectToWs());
-        dispatch(getUsers())
+        if(window.sessionStorage) {
+            let username = window.sessionStorage.getItem("username");
+            if(username) {
+                dispatch(setUsername(username));
+            }
+        }
     }
 
     handleUsernameChange(event) {

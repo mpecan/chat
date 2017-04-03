@@ -16,4 +16,6 @@ class ChatWebsocketController(private val chatService: ChatService) {
     @MessageMapping("/post/{roomId}")
     @ResponseBody
     fun receiveMessage(@Payload messageRequest: PostMessageRequest) = chatService.postMessage(messageRequest.username, messageRequest.chatId, messageRequest.content)
+
+
 }
