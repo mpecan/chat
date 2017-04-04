@@ -9,6 +9,7 @@ import si.pecan.model.ChatRoom
 import si.pecan.dto.ChatRoom as Dto
 import si.pecan.model.InstantMessage
 import si.pecan.model.User
+import java.time.LocalDateTime
 import java.util.*
 import javax.transaction.Transactional
 import kotlin.experimental.and
@@ -23,8 +24,10 @@ class ChatService(private val userRepository: UserRepository,
 
     @Transactional
     fun getOrCreateChat(initiatorUsername: String, targetUsername: String): Dto {
-        val initiator = userRepository.findByUsername(initiatorUsername) ?: throw UserNotFound()
         val target = userRepository.findByUsername(targetUsername) ?: throw UserNotFound()
+        val initiator = userRepository.save(userRepository.findByUsername(initiatorUsername)?.apply {
+            lastActive = LocalDateTime.now()
+        } ?: throw UserNotFound())
         val chatRoom = initiator.chatRooms.find { it.users.any { it == target } } ?: chatRoomRepository.save(ChatRoom().apply {
             users = arrayListOf(initiator, target)
             createdBy = initiator
@@ -54,7 +57,10 @@ class ChatService(private val userRepository: UserRepository,
             content = messageContent
             postedBy = user
 
-        }).toDto().apply { this.chatId = chatId }
+        }).toDto().apply {
+            this.chatId = chatId
+            this.postedByUser = userRepository.save(user.apply { lastActive = LocalDateTime.now()}).toDto()
+        }
     }
 
     fun getAllRooms(username: String): List<Dto> = chatRoomRepository

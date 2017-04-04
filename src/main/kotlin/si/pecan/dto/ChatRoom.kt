@@ -10,6 +10,6 @@ import java.util.*
  */
 data class ChatRoom(val id: UUID, val initiator: User, val target: User, val messages: List<Message>, val created: LocalDateTime, val lastMessageTime: LocalDateTime?)
 
-data class Message(val poster: String, val content: String, val created: LocalDateTime, val id: UUID, var chatId: UUID? = null)
+data class Message(val poster: String, val content: String, val created: LocalDateTime, val id: UUID, var chatId: UUID? = null, var postedByUser: User)
 
-fun InstantMessage.toDto() = Message(postedBy.username, content, created, this.id!!)
+fun InstantMessage.toDto() = Message(postedBy.username, content, created, this.id!!, postedByUser = postedBy.toDto())

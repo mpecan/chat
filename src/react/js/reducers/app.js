@@ -76,7 +76,7 @@ const actionsMap = {
     },
 
     [MESSAGE_RECEIVED]: (state, action) => {
-        let data = JSON.parse(action.message.body);
+        let data = action.message;
         let currentChat = data.chat_id;
         data.created = moment(data.created);
         return state.mergeIn(['chatRooms', currentChat , 'messages'], {[data.id]: data});

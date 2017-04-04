@@ -89,7 +89,7 @@ function subscribeToChatRooms(username) {
 function subscribeToUsers() {
     return function (dispatch) {
         api.client.subscribe("/topic/users", (message) => {
-            dispatch(gotUser(message));
+            dispatch(gotUser(JSON.parse(message.body)));
         })
     }
 }
@@ -130,7 +130,9 @@ function messageReceived(message) {
 export function subscribeToRoom(roomId) {
     return function (dispatch) {
         api.client.subscribe("/topic/post/" + roomId, (message) => {
-            dispatch(messageReceived(message));
+            let messageData = JSON.parse(message.body);
+            dispatch(messageReceived(messageData));
+            dispatch(gotUser(messageData.posted_by_user));
         });
     };
 }
@@ -166,7 +168,7 @@ function failedToGetUsers() {
 function gotUser(user) {
     return {
         type: GOT_USER,
-        user: JSON.parse(user.body),
+        user,
     }
 }
 

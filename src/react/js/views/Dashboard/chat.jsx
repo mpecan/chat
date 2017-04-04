@@ -4,14 +4,17 @@ import Message from './message';
 import {sendMessage, subscribeToRoom} from '../../actions/app'
 import {connect} from 'react-redux';
 import _ from 'lodash';
+import moment from 'moment';
 
-@connect(null)
+@connect(state => ({
+    users: state.app.get('users'),
+}))
 export default class Chat extends Component {
     static propTypes = {
         item: PropTypes.objectOf(ChatRoom),
         user: PropTypes.string,
         dispatch: PropTypes.func,
-
+        users: PropTypes.object,
     };
 
     constructor(props) {
@@ -26,6 +29,22 @@ export default class Chat extends Component {
         this.state = {message: ""};
         const {item, dispatch} = this.props;
         dispatch(subscribeToRoom(item));
+    }
+    componentDidMount() {
+        const component = this;
+        if(this.timer){
+            clearInterval(this.timer);
+        }
+        this.timer = setInterval(function() {
+            component.forceUpdate();
+        }, 1000);
+    }
+
+    componentWillUnmount(){
+        if(this.timer){
+            clearInterval(this.timer);
+            this.timer = null;
+        }
     }
 
     messageChange(event) {
@@ -63,16 +82,17 @@ export default class Chat extends Component {
         const {
             item,
             user,
+            users,
         } = this.props;
 
-        const other = [item.get('initiator'), item.get('target')].find((other) => user !== other.username);
+        const other = users.get([item.get('initiator'), item.get('target')].find((other) => user !== other.username).id);
 
         const sorted = _.chain(item.get('messages').toJS()).map((value, key) => value).sort((one, other) => one.created.diff(other.created, "seconds")).map((message) =>
             <Message key={message.id} item={message} currentUser={user !== message.poster}/>).value();
 
         return (
             <div className="ChatContainer">
-                <div className="Title">{other.username}</div>
+                <div className="Title">{other.username} ({other.lastActive.diff(moment(), "seconds") < 180 ? "Active" : "Inactive"})</div>
                 <div className="Chat">
                     <div className="Messages" ref={(ref) => this.messageList = ref}>
                         {sorted}
