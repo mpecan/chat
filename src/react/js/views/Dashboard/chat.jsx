@@ -92,7 +92,7 @@ export default class Chat extends Component {
 
         return (
             <div className="ChatContainer">
-                <div className="Title">{other.username} ({other.lastActive.diff(moment(), "seconds") < 180 ? "Active" : "Inactive"})</div>
+                <div className="Title">{other.username} ({Math.abs(other.lastActive.diff(moment(), "seconds")) < 180 ? "Active" : "Inactive"})</div>
                 <div className="Chat">
                     <div className="Messages" ref={(ref) => this.messageList = ref}>
                         {sorted}
