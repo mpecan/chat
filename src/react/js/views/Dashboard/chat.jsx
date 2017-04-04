@@ -65,14 +65,14 @@ export default class Chat extends Component {
             user,
         } = this.props;
 
-        const other = [item.get('initiator'), item.get('target')].map((user) => user.username).find((username) => user.username !== username);
+        const other = [item.get('initiator'), item.get('target')].find((other) => user !== other.username);
 
         const sorted = _.chain(item.get('messages').toJS()).map((value, key) => value).sort((one, other) => one.created.diff(other.created, "seconds")).map((message) =>
             <Message key={message.id} item={message} currentUser={user !== message.poster}/>).value();
 
         return (
             <div className="ChatContainer">
-                <div className="Title">{other}</div>
+                <div className="Title">{other.username}</div>
                 <div className="Chat">
                     <div className="Messages" ref={(ref) => this.messageList = ref}>
                         {sorted}
